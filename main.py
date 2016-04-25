@@ -45,13 +45,7 @@ CORS(app)
 
 @app.route('/api/char-rnn', methods=['GET'])
 def char_rnn():
-    num = request.args.get('num', '200')
-    prime = request.args.get('prime', ' ')
-    app.logger.info(num)
-    app.logger.info(prime)
-
-    poem = sample(500, " ")
-    return poem
+    return sample(200, " ")
 
 @app.route('/')
 def main():

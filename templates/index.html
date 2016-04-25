@@ -8,6 +8,11 @@
       <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
 
       <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js"></script>
+      <!-- Firebase -->
+      <script src="https://cdn.firebase.com/js/client/2.2.4/firebase.js"></script>
+      <!-- AngularFire -->
+      <script src="https://cdn.firebase.com/libs/angularfire/1.2.0/angularfire.min.js"></script>
+
   </head>
   <body ng-app="Poem" ng-controller="Ctrl">
     <div>
@@ -16,17 +21,19 @@
       </h1>
       <pre>
           <div ng-hide="poem">
-              <img src="/static/pencil.gif" width="128">
+              <img src="pencil.gif" width="128">
               시를 쓰는 중입니다 잠시 기다려 주세요
           </div>
           {{poem}}
+          <div ng-show="poem">
+             <button type="button" class="btn btn-primary navbar-btn" ng-click="savePoem();getPoem()">괜찮네요!</button>
+          </div>
       </pre>
     </div>
   </body>
 
 <script>
-angular.module("Poem", [])
-.controller("Ctrl", function ($scope, $http) {
+angular.module("Poem", ["firebase"]).controller("Ctrl", function ($scope, $firebaseArray, $http) {
     $scope.poem = null;
 
     $scope.getPoem = function() {
@@ -35,6 +42,25 @@ angular.module("Poem", [])
             .success(function(data){
                 $scope.poem = data;
             });
+    }
+
+    $scope.savePoem = function() {
+        if ($scope.poem==null) { // do nothing
+            return;
+        }
+        var ref = new Firebase("https://poem-bot.firebaseio.com/goodjob");
+        // create a synchronized array
+        $scope.poems = $firebaseArray(ref);
+
+        // add new items to the array
+        // the message is automatically added to our Firebase database!
+        $scope.addMessage = function() {
+            $scope.messages.$add({
+                text: $scope.poem,
+                time: Firebase.ServerValue.TIMESTAMP
+            });
+        };
+
     }
 
     $scope.getPoem();
