@@ -1,4 +1,5 @@
 Flask==0.10.1
+flask-cors==2.1.2
 gunicorn==19.4.5
 https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow-0.8.0-cp27-none-linux_x86_64.whl
 

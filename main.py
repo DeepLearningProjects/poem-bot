@@ -38,8 +38,10 @@ def sample(num, prime):
 
 # webapp
 from flask import Flask, jsonify, render_template, request
+from flask.ext.cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 
 @app.route('/api/char-rnn', methods=['GET'])
 def char_rnn():
