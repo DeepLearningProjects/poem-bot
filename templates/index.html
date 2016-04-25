@@ -1,0 +1,45 @@
+<!doctype html>
+<html>
+  <head>
+      <title>오늘의 시 (By 시봇 0.001)</title>
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+      <script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
+      <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
+      <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js"></script>
+  </head>
+  <body ng-app="Poem" ng-controller="Ctrl">
+    <div>
+      <h1>오늘의 시 (By 시봇 0.001)
+        <button type="button" class="btn btn-primary navbar-btn" ng-click="getPoem()">다시쓰기</button>
+      </h1>
+      <pre>
+          <div ng-hide="poem">
+              <img src="pencil.gif" width="128">
+              시를 쓰는 중입니다 잠시 기다려 주세요
+          </div>
+          {{poem}}
+      </pre>
+    </div>
+  </body>
+
+<script>
+angular.module("Poem", [])
+.controller("Ctrl", function ($scope, $http) {
+    $scope.poem = null;
+
+    $scope.getPoem = function() {
+        $scope.poem = null;
+        $http({method: "GET", url: "https://poem-bot.herokuapp.com/api/char-rnn"})
+            .success(function(data){
+                $scope.poem = data;
+            });
+    }
+
+    $scope.getPoem();
+});
+
+
+</script>
+</html>

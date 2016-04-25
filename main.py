@@ -42,6 +42,7 @@ from flask import Flask, jsonify, render_template, request
 app = Flask(__name__)
 
 @app.route('/api/char-rnn', methods=['GET'])
+@crossdomain(origin='*')
 def char_rnn():
     num = request.args.get('num', '200')
     prime = request.args.get('prime', ' ')
