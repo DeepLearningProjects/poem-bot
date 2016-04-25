@@ -16,7 +16,7 @@
       </h1>
       <pre>
           <div ng-hide="poem">
-              <img src="pencil.gif" width="128">
+              <img src="/static/pencil.gif" width="128">
               시를 쓰는 중입니다 잠시 기다려 주세요
           </div>
           {{poem}}
@@ -31,7 +31,7 @@ angular.module("Poem", [])
 
     $scope.getPoem = function() {
         $scope.poem = null;
-        $http({method: "GET", url: "https://poem-bot.herokuapp.com/api/char-rnn"})
+        $http({method: "GET", url: "/api/char-rnn"})
             .success(function(data){
                 $scope.poem = data;
             });
