@@ -20,11 +20,11 @@ p8
 I128
 sS'data_dir'
 p9
-S'data/tinyshakespeare'
+S'data/poem'
 p10
 sS'vocab_size'
 p11
-I65
+I117
 sS'learning_rate'
 p12
 F0.002
