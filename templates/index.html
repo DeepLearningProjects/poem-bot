@@ -31,10 +31,9 @@ angular.module("Poem", [])
 
     $scope.getPoem = function() {
         $scope.poem = null;
-        $http({method: "GET", url: "/api/char-rnn"})
+        $http({method: "GET", url: "https://poem-bot.herokuapp.com/api/char-rnn"})
             .success(function(data){
                 $scope.poem = data;
-                console.log($scope.poem)
             });
     }
 
