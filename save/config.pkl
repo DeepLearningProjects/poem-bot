@@ -24,7 +24,7 @@ S'data/poem'
 p10
 sS'vocab_size'
 p11
-I117
+I173
 sS'learning_rate'
 p12
 F0.002
