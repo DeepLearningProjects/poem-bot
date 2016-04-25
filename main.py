@@ -44,7 +44,7 @@ CORS(app)
 
 @app.route('/api/char-rnn', methods=['GET'])
 def char_rnn():
-    return sample(300, " ")
+    return sample(250, " ")
 
 @app.route('/')
 def main():
