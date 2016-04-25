@@ -1,0 +1,7 @@
+{
+    "name": "char-rnn-tensorflow",
+    "buildpacks": [
+        { "url": "https://github.com/DeepLearningProjects/char-rnn-tensorflow" },
+        { "url": "https://github.com/DeepLearningProjects/char-rnn-tensorflow" }
+    ]
+}
