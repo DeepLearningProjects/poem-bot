@@ -49,7 +49,7 @@ def char_rnn():
 
 @app.route('/')
 def main():
-    return "?"
+    return "https://github.com/DeepLearningProjects/poem-bot"
 
 if __name__ == '__main__':
    # app.debug = True
