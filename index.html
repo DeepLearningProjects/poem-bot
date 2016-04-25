@@ -32,20 +32,34 @@
 
   <div class="alert alert-warning" role="alert">
   <H3>이 봇은 무엇인가?</H3>
-      이 봇은 딥러닝을 기반으로 이전의 시에서 배워 새로운 시를 만들어 내는 프로그램입니다. 2017년 신촌문예에 작품을 제출하는 것을 목표로 열심히 학습하고 있습니다
+      이 봇은 딥러닝을 기반으로 이전의 시에서 배워 새로운 시를 만들어 내는 프로그램입니다. 지금은 매우 엉성하지만 일년간 학습하여 2017년 신촌문예 작품을 제출하는 것을 목표로 열심히 학습하고 있습니다.
   <H3>참여하기</H3>
       <li>우선 시를 보고 마음에 들경우 "오~ 괜찮아" 버턴을 눌러주시면 이 시를 이용 추가학습합니다.</li>
+      <li>여러분들의 시를 아래 "시 알려주기" 입력을 통해 로봇에게 학습시켜주세요.</li>
       <li>딥러닝 알고리즘에 기여하고 싶으시면 <A href="https://github.com/DeepLearningProjects/poem-bot">https://github.com/DeepLearningProjects/poem-bot</A> 에 참여하시면 됩니다.</li>
-      <ul><li>지금은 매우 단순한 문자 RNN 학습방법입니다</li></ul>
-      <li>딥러닝에 대해 자세한 정보를 알고 싶으시면 다음 <A href="https://hunkim.github.io/ml/">https://hunkim.github.io/ml/</A> 수업에 참여 하시면 됩니다.</li>
+      <ul><li>지금은 매우 단순한 문자 RNN 학습방법입니다. 추후 단어 레벨이나 attention 등을 추가 실험할 예정입니다.</li></ul>
+      <li>딥러닝에 대해 자세한 정보를 알고 싶으시면  <A href="https://hunkim.github.io/ml/">https://hunkim.github.io/ml/</A> 을 참고 하시면 됩니다.</li>
   </div>
+
+  <form role = "form">
+   <div class = "form-group">
+      <label for = "name">(10자 이상) 시 알려주기</label>
+       <button type="button" class="btn btn-primary"
+                      ng-disabled="user.poem.length<10" ng-click="saveUserPoem()">이거 학습해봐!</button>
+      <textarea class = "form-control" rows = "3" ng-model="user.poem">
+      </textarea>
+   </div>
+
+</form>
+
 
 
   </body>
 <script>
-angular.module("Poem", ["firebase"]).controller("Ctrl", function ($scope, $firebaseArray, $http) {
+angular.module("Poem", ["firebase"]).controller("Ctrl", function ($scope, $timeout, $firebaseArray, $http) {
     $scope.poem = null;
     $scope.stored = false;
+    $scope.user = {poem:""};
 
     $scope.getPoem = function() {
         $scope.stored = false;
@@ -72,7 +86,28 @@ angular.module("Poem", ["firebase"]).controller("Ctrl", function ($scope, $fireb
         });
 
         $scope.stored = true;
+    }
 
+    $scope.saveUserPoem = function() {
+        if ($scope.user.poem=="") { // do nothing
+            return;
+        }
+        var ref = new Firebase("https://poem-bot.firebaseio.com/userpoem");
+        // create a synchronized array
+        $scope.poems = $firebaseArray(ref);
+
+        // add new items to the array
+        // the message is automatically added to our Firebase database!
+        $scope.poems.$add({
+            text: $scope.user.poem,
+            time: Firebase.ServerValue.TIMESTAMP
+        }).then(function(ref) {
+            $scope.user.poem="감사합니다! 저장되었습니다.";
+
+             $timeout(function() {
+                 $scope.user.poem="";
+             }, 2000);
+        });
     }
 
     $scope.getPoem();
