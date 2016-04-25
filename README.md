@@ -7,7 +7,7 @@ char-rnn from https://github.com/sherjilozair/char-rnn-tensorflow.
 * Run heroku create and push to heroku:
 
 ```bash
-cd poem-writer
+cd poem-bot
 heroku create
 git push heroku master
 ```
