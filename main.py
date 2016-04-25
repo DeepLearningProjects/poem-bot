@@ -49,7 +49,7 @@ def char_rnn():
 
 @app.route('/')
 def main():
-    return render_template('index.html')
+    return "?"
 
 if __name__ == '__main__':
    # app.debug = True
