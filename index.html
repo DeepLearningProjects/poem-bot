@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
   <head>
-      <title>신춘문예 2017 후보 시봇 (v0.002)</title>
+      <title>신춘문예 2017 후보 시봇</title>
       <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
       <script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
       <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
@@ -16,25 +16,36 @@
   </head>
   <body ng-app="Poem" ng-controller="Ctrl">
     <div>
-      <h1>신춘문예 2017 후보 시봇 <small>(v0.002)</small>
+      <h1>신춘문예 2017 후보 시봇 <small>(v0.003)</small>
         <button type="button" class="btn btn-success navbar-btn glyphicon glyphicon-pencil" ng-click="getPoem()"> 다시쓰기</button>
       </h1>
-      <pre>
+      <div class="panel panel-default">
           <div ng-hide="poem">
               <img src="pencil.gif" width="128">
               시를 쓰는 중입니다. 잠시 기다려 주세요.
           </div>
-          {{poem}}
+          <div ng-show="poem" class="panel-heading">괜찮은 행이 있으면 선택해주세요. 선택된 행들은 자동저장후 학습됩니다.</div>
+          <form><ul class="list-group">
+            <li class="list-group-item" ng-repeat="line in poem track by $index">
+            <input
+              type="checkbox"
+              ng-click="savePoem(line)"> {{line}}
+            </li>
+          </ul>
+          </form>
+        <!--  
           <div ng-show="poem">
              <button type="button" class="btn btn-primary glyphicon glyphicon-thumbs-up"
-                      ng-disabled="stored" ng-click="savePoem()"> 오~ 괜찮아!</button></div></pre>
-    </div>
+                      ng-disabled="stored" ng-click="savePoem()">선택한 행들은 괜찮아!</button>
+          </div>
+        -->
+        </div>
 
   <div class="alert alert-warning" role="alert">
   <H3>이 봇은 무엇인가?</H3>
       이 봇은 딥러닝을 기반으로 기존의 시에서 배워 새로운 시를 만들어 내는 프로그램입니다. 지금은 매우 엉성하지만 일년간 학습하여 2017년 신촌문예 작품을 제출하는 것을 목표로 하고 있습니다.
   <H3>참여하기</H3>
-      <li>우선 시를 보고 마음에 들경우 "오~ 괜찮아" 버턴을 눌러주시면 이 시를 추가학습에 사용합니다.</li>
+      <li>우선 시를 보고 마음에 드는 행이 있으면 체크박스를 선택해 주시면 이 행을 추가학습에 사용합니다.</li>
       <li>여러분들의 시를 아래 "시 알려주기" 입력을 통해 로봇에게 학습시켜주세요.</li>
       <li>시봇 알고리즘에 기여하고 싶으시면 <A href="https://github.com/DeepLearningProjects/poem-bot">https://github.com/DeepLearningProjects/poem-bot</A> 에 참여하시면 됩니다.</li>
       <ul><li>지금은 매우 단순한 문자 RNN 학습방법입니다. 추후 단어 레벨이나 attention 등을 추가 할 예정입니다.</li></ul>
@@ -60,21 +71,25 @@ angular.module("Poem", ["firebase"]).controller("Ctrl", function ($scope, $timeo
     $scope.poem = null;
     $scope.stored = false;
     $scope.user = {poem:""};
+    $scope.selection = [];
 
     $scope.getPoem = function() {
         $scope.stored = false;
         $scope.poem = null;
+        $scope.selection = [];
+
         $http({method: "GET", url: "https://poem-bot.herokuapp.com/api/char-rnn"})
             .success(function(data) {
               //$scope.poem = data;
-              var lines = data.split('\n');
-              lines.shift();
-              lines.pop();
-              $scope.poem = lines.join('\n');
+              $scope.poem = data.split('\n');
+              $scope.poem.shift();
+              $scope.poem.pop();
+              //$scope.poem = lines.join('\n');
             });
     }
 
-    $scope.savePoem = function() {
+
+    $scope.savePoem = function(line) {
         if ($scope.poem==null) { // do nothing
             return;
         }
@@ -84,12 +99,14 @@ angular.module("Poem", ["firebase"]).controller("Ctrl", function ($scope, $timeo
 
         // add new items to the array
         // the message is automatically added to our Firebase database!
-        $scope.poems.$add({
-            text: $scope.poem,
+        if (line) {
+          $scope.poems.$add({
+            text: line,
             time: Firebase.ServerValue.TIMESTAMP
-        });
-
-        $scope.stored = true;
+          });
+        } else {
+          $scope.stored = true;
+        }
     }
 
     $scope.saveUserPoem = function() {
