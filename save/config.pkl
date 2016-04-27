@@ -24,7 +24,7 @@ S'data/tinyshakespeare'
 p10
 sS'vocab_size'
 p11
-I159
+I150
 sS'learning_rate'
 p12
 F0.002
