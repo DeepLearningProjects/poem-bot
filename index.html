@@ -25,14 +25,13 @@
               시를 쓰는 중입니다. 잠시 기다려 주세요.
           </div>
           <div ng-show="poem" class="panel-heading">괜찮은 행이 있으면 선택해주세요. 선택된 행들은 자동저장후 학습됩니다.</div>
-          <form><ul class="list-group">
+          <ul class="list-group">
             <li class="list-group-item" ng-repeat="line in poem track by $index">
             <input
               type="checkbox"
               ng-click="savePoem(line)"> {{line}}
             </li>
           </ul>
-          </form>
         <!--  
           <div ng-show="poem">
              <button type="button" class="btn btn-primary glyphicon glyphicon-thumbs-up"
