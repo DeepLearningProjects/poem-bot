@@ -65,8 +65,10 @@ angular.module("Poem", ["firebase"]).controller("Ctrl", function ($scope, $timeo
         $scope.stored = false;
         $scope.poem = null;
         $http({method: "GET", url: "https://poem-bot.herokuapp.com/api/char-rnn"})
-            .success(function(data){
-                $scope.poem = data;
+            .success(function(data) {
+              var lines = data.split('\n');
+              lines = lines.splice(1, -1); // remove the first/last line
+              $scope.poem = lines.join('\n');
             });
     }
 
