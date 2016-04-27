@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
   <head>
-      <title>신춘문예 2017 후보 시봇 (v0.001)</title>
+      <title>신춘문예 2017 후보 시봇 (v0.002)</title>
       <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
       <script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
       <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
@@ -16,7 +16,7 @@
   </head>
   <body ng-app="Poem" ng-controller="Ctrl">
     <div>
-      <h1>신춘문예 2017 후보 시봇 <small>(v0.001)</small>
+      <h1>신춘문예 2017 후보 시봇 <small>(v0.002)</small>
         <button type="button" class="btn btn-success navbar-btn glyphicon glyphicon-pencil" ng-click="getPoem()"> 다시쓰기</button>
       </h1>
       <pre>
@@ -66,8 +66,10 @@ angular.module("Poem", ["firebase"]).controller("Ctrl", function ($scope, $timeo
         $scope.poem = null;
         $http({method: "GET", url: "https://poem-bot.herokuapp.com/api/char-rnn"})
             .success(function(data) {
+              //$scope.poem = data;
               var lines = data.split('\n');
-              lines = lines.splice(1, -1); // remove the first/last line
+              lines.shift();
+              lines.pop();
               $scope.poem = lines.join('\n');
             });
     }
